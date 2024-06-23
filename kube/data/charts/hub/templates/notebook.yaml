@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: notebooks-pv
+spec:
+  storageClassName: local
+  accessModes: [ "ReadWriteMany" ]
+  capacity:
+    storage: 56Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /home/tanlda/work/microtypo/notebooks
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - master
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: notebooks-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local
+  accessModes: [ "ReadWriteMany" ]
+  resources:
+    requests:
+      storage: 56Gi
+  volumeName: notebooks-pv
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notebook-aws
+  namespace: {{ .Release.Namespace }}
+data:
+  credentials: |
+    [default]
+    aws_access_key_id = {{ .Values.notebook.aws.accessKey }}
+    aws_secret_access_key = {{ .Values.notebook.aws.secretKey }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hub-notebook
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hub-notebook
+  template:
+    metadata:
+      labels:
+        app: hub-notebook
+    spec:
+      containers:
+        - name: notebook
+          image: microtypo.io/notebook
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /home/jovyan/work
+              name: notebooks
+            - mountPath: /home/jovyan/.aws
+              name: aws
+            - mountPath: /home/jovyan/work/typo
+              name: typo
+          ports:
+            - containerPort: 8888
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - master
+      volumes:
+        - name: notebooks
+          persistentVolumeClaim:
+            claimName: notebooks-pvc
+        - name: aws
+          configMap:
+            name: notebook-aws
+        - name: typo
+          hostPath:
+            path: /data/typo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notebook
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: hub-notebook
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.44
+  ports:
+    - port: 80
+      targetPort: 8888
+---

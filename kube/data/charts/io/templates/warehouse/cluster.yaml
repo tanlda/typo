@@ -1,0 +1,20 @@
+apiVersion: stackgres.io/v1
+kind: SGCluster
+metadata:
+  name: warehouse
+  namespace: {{ .Release.Namespace }}
+spec:
+  postgres:
+    version: "16"
+    extensions: []
+  instances: {{ .Values.warehouse.instances }}
+  sgInstanceProfile: warehouse-profile
+  profile: development
+  pods:
+    persistentVolume:
+      storageClass: warehouse
+      size: 24Gi
+  configurations:
+    sgPostgresConfig: warehouse-pgconfig
+    sgPoolingConfig: warehouse-poolconfig
+---

@@ -1,0 +1,11 @@
+networking:
+  enabled: true
+
+storage:
+  enabled: true
+
+cluster:
+  enabled: true
+
+balancer:
+  enabled: true

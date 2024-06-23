@@ -1,0 +1,11 @@
+version: "3"
+
+tasks:
+  build:
+    cmds:
+      - docker build -t {{ .REPO }}/{{ .NAME }}:{{ .TAG }} {{ .NAME }}
+      - docker push {{ .REPO }}/{{ .NAME }}:{{ .TAG }}
+    vars:
+      REPO: '{{ .REPO | default "microtypo.io" }}'
+      NAME: '{{ .NAME | default "" }}'
+      TAG: '{{ .TAG | default "latest" }}'

@@ -1,0 +1,98 @@
+kubeVersion: v1.29
+
+environments:
+  stage:
+    values:
+      - values.yaml
+      - values/values.stage.yaml
+  prod:
+    values:
+      - values.yaml
+      - values/values.prod.yaml
+---
+repositories:
+  - name: stackgres
+    url: https://stackgres.io/downloads/stackgres-k8s/stackgres/helm/
+
+releases:
+  - name: dns
+    version: 0.1.0
+    chart: charts/dns
+    condition: dns.enabled
+    namespace: dns
+    createNamespace: true
+    values:
+      - values.gotmpl
+
+  - name: sgo
+    version: 1.10.0
+    chart: stackgres/stackgres-operator
+    condition: sgo.enabled
+    disableValidation: true
+    createNamespace: true
+    namespace: sgo
+    values:
+      - values.gotmpl
+
+  - name: io
+    version: 0.1.0
+    chart: charts/io
+    condition: io.enabled
+    createNamespace: true
+    namespace: io
+    values:
+      - values.gotmpl
+    needs:
+      - sgo/sgo
+
+  - name: hub
+    version: 0.1.0
+    chart: charts/hub
+    condition: hub.enabled
+    createNamespace: true
+    namespace: hub
+
+  - name: mlops
+    version: 0.1.0
+    chart: charts/mlops
+    condition: mlops.enabled
+    createNamespace: true
+    namespace: mlops
+    values:
+      - values.gotmpl
+
+  - name: airflow
+    version: 0.1.0
+    chart: charts/airflow
+    condition: airflow.enabled
+    createNamespace: true
+    namespace: airflow
+    values:
+      - values.gotmpl
+
+  - name: pipes
+    version: 0.1.0
+    chart: charts/pipes
+    condition: pipes.enabled
+    createNamespace: true
+    namespace: pipes
+    values:
+      - values.gotmpl
+
+  - name: dash
+    version: 0.1.0
+    chart: charts/dash
+    condition: dash.enabled
+    createNamespace: true
+    namespace: dash
+    values:
+      - values.gotmpl
+
+  - name: visual
+    version: 0.1.0
+    chart: charts/visual
+    condition: visual.enabled
+    createNamespace: true
+    namespace: visual
+    values:
+      - values.gotmpl

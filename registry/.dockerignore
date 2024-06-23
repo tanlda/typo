@@ -1,0 +1,35 @@
+# Ignore everything
+**
+
+# But white-list specific files necessary for the build
+!Dockerfile
+!*.dockerfile
+!docker-compose*.yml
+
+# Include the application source code
+!src/
+!lib/
+
+# Include specific file types
+!*.js
+!*.json
+!*.html
+!*.css
+
+# Include build directories necessary for the application
+!public/
+!build/
+!dist/
+
+# Python virtual environments
+**/venv/
+**/__pycache__/
+
+# Node.js dependencies
+**/node_modules/
+
+# Ignore Git and IDE specific files
+.git/
+.gitignore
+.vscode/
+.idea/

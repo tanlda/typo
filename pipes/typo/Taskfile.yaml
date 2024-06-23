@@ -1,0 +1,25 @@
+version: "3"
+
+tasks:
+  dbt:
+    cmds:
+      - rm -rf ./dbt
+      - cp -r {{ .DBT }} ./dbt
+      - dbt deps --project-dir ./dbt --profiles-dir ./dbt
+      - dbt parse --project-dir ./dbt --profiles-dir ./dbt
+    vars:
+      DBT: '{{ .DBT | default "../../dbts/typo" }}'
+
+  build:
+    cmds:
+      - docker build -t {{ .REPO }}/{{ .NAME }}:{{ .TAG }} .
+      - docker push {{ .REPO }}/{{ .NAME }}:{{ .TAG }}
+    vars:
+      REPO: '{{ .REPO | default "microtypo.io" }}'
+      NAME: '{{ .NAME | default "typo" }}'
+      TAG: '{{ .TAG | default "latest" }}'
+
+  buildd:
+    cmds:
+      - task: dbt
+      - task: build

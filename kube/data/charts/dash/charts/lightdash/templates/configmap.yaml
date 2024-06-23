@@ -1,0 +1,21 @@
+{{- if .Values.configMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "lightdash.fullname" . }}
+  labels:
+    {{- include "lightdash.labels" . | nindent 4 }}
+data:
+  PGUSER: {{ include "lightdash.database.user" . }}
+  PGHOST: {{ include "lightdash.database.host" . }}
+  PGPORT: {{ include "lightdash.database.port" . | quote }}
+  PGDATABASE: {{ include "lightdash.database.name" . }}
+  HEADLESS_BROWSER_HOST: {{ include "lightdash.headlessBrowser.host" . }}
+  HEADLESS_BROWSER_PORT: {{ include "lightdash.headlessBrowser.port" .  | quote }}
+  {{- if .Values.scheduler.enabled }}
+  SCHEDULER_ENABLED: "false"
+  {{- else }}
+  SCHEDULER_ENABLED: "true"
+  {{- end }}
+  {{- toYaml .Values.configMap | nindent 2 }}
+{{- end }}

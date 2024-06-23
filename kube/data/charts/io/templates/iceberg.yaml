@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iceberg
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: iceberg
+data:
+  CATALOG_IO__IMPL: "org.apache.iceberg.aws.s3.S3FileIO"
+  CATALOG_WAREHOUSE: "s3://iceberg"
+  CATALOG_CACHE__ENABLED: "false"
+  CATALOG_S3_ENDPOINT: "http://lakehouse.io"
+  CATALOG_S3_PATH__STYLE__ACCESS: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: iceberg
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: iceberg
+stringData:
+  AWS_REGION: "ap-southeast-1"
+  AWS_ACCESS_KEY_ID: "admin"
+  AWS_SECRET_ACCESS_KEY: "password"
+  REST_CREDENTIAL: "iceberg"  # connect to http://iceberg.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iceberg
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: iceberg
+spec:
+  selector:
+    matchLabels:
+      app: iceberg
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: iceberg
+    spec:
+      containers:
+        - name: iceberg
+          image: tabulario/iceberg-rest:1.5.0
+          ports:
+            - containerPort: 8181
+          envFrom:
+            - configMapRef:
+                name: iceberg
+            - secretRef:
+                name: iceberg
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - master
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iceberg
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: iceberg
+spec:
+  type: LoadBalancer
+  selector:
+    app: iceberg
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8181
+---

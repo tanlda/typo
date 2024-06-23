@@ -1,0 +1,16 @@
+version: "3"
+
+tasks:
+  dep:
+    cmds:
+      - |
+        cwd=$(pwd)
+        for dir in $(ls -d charts/*/); do
+          cd $cwd/$dir; helm dep build &
+        done
+        wait
+        cd $cwd
+
+  clean:
+    cmds:
+      - shopt -s globstar && rm -rf */**/*.tgz

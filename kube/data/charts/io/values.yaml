@@ -1,0 +1,63 @@
+global: { }
+
+nameOverride: ""
+fullnameOverride: ""
+
+lakehouse:
+  enabled: true
+  fullnameOverride: lakehouse
+  defaultBuckets: default
+
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 512Mi
+    limits:
+      cpu: 4
+      memory: 8192Mi
+
+  auth:
+    rootUser: admin
+    rootPassword: password
+
+  extraEnvVars:
+    - name: MINIO_LOG_LEVEL
+      value: DEBUG
+
+  service:
+    type: LoadBalancer
+    ports:
+      api: 80
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - master
+
+  persistence:
+    size: 128Gi
+    storageClass: local
+    existingClaim: lakehouse-pvc
+    existingVolume: lakehouse-pv
+    mountPath: /minio/data
+
+iceberg:
+  catalog:
+    warehouse: default
+    endpoint: http://lakehouse.io
+    accessKey: admin
+    secretKey: password
+    region: ap-southeast-1
+
+warehouse:
+  instances: 2
+
+  backup:
+    bucketName: ""
+    accessKey: ""
+    secretKey: ""

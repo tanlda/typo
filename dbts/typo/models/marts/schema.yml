@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: mart_total
+    columns:
+      - name: count
+
+  - name: mart_user
+    columns:
+      - name: date
+      - name: count
+
+  - name: mart_top_keys_by_occupations
+    columns:
+      - name: occupation
+      - name: key
+      - name: count
+      - name: percentage
+      - name: average
+
+

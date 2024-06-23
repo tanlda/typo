@@ -1,0 +1,11 @@
+global: {}
+
+nameOverride: ""
+fullnameOverride: ""
+
+notebook:
+  enabled: true
+
+  aws:
+    accessKey: ""
+    secretKey: ""

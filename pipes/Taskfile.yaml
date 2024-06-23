@@ -1,0 +1,16 @@
+version: "3"
+
+tasks:
+  clean:
+    cmds:
+      - for: [ "Succeeded", "Terminated" ]
+        cmd: kubectl delete pods --force --field-selector status.phase={{ .ITEM }} --namespace {{ .NS }}
+    vars:
+      NS: '{{ .NS | default "pipes" }}'
+
+  nuke:
+    cmds:
+      - for: [ "Succeeded", "Terminated", "Running" ]
+        cmd: kubectl delete pods --force --field-selector status.phase={{ .ITEM }} --namespace {{ .NS }}
+    vars:
+      NS: '{{ .NS | default "pipes" }}'

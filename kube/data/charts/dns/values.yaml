@@ -1,0 +1,22 @@
+global: { }
+
+nameOverride: ""
+fullnameOverride: ""
+
+dashboard:
+  enabled: true
+  replicaCount: 1
+  cloudflare:
+    tunnel_token: ""
+
+dagster:
+  enabled: true
+  replicaCount: 1
+  cloudflare:
+    tunnel_token: ""
+
+lightdash:
+  enabled: true
+  replicaCount: 1
+  cloudflare:
+    tunnel_token: ""

@@ -1,0 +1,30 @@
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: InitConfiguration
+nodeRegistration:
+  name: master
+  ignorePreflightErrors:
+    - Swap
+  criSocket: "unix:///var/run/crio/crio.sock"
+  taints: [ ]  # allow schedule on control-plane node
+  kubeletExtraArgs:
+    node-ip: "192.168.1.10"
+    hostname-override: "master"
+localAPIEndpoint:
+  advertiseAddress: "192.168.1.10"
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+networking:
+  # nodeSubnet: "192.168.1.0/24"  # 256 /
+  # externalSubnet: "192.168.2.0/24"  # 256 -
+  serviceSubnet: "192.168.4.0/18"  # 16,384 -
+  podSubnet: "192.168.1.0/17"  # 32,768 /
+  dnsDomain: "cluster.local"
+controlPlaneEndpoint: "192.168.1.10"
+apiServer:
+  extraArgs:
+    enable-admission-plugins: "NodeRestriction,PodNodeSelector,PodTolerationRestriction"
+  certSANs:
+    - "192.168.1.10"
+clusterName: "kubernetes"
+---

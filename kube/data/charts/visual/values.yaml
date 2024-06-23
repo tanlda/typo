@@ -1,0 +1,68 @@
+global: { }
+
+nameOverride: ""
+fullnameOverride: ""
+
+superset:
+  enabled: true
+  fullnameOverride: superset
+
+  service:
+    type: LoadBalancer
+    port: 80
+    nodePort:
+      http: null
+
+  extraSecretEnv:
+    SUPERSET_SECRET_KEY: superset
+
+  init:
+    adminUser:
+      username: admin
+      password: password
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - master
+
+  postgresql:
+    auth:
+      username: superset
+      password: superset
+      database: superset
+      postgresPassword: superset
+    primary:
+      persistence:
+        size: 16Gi
+        storageClass: local
+        existingClaim: superset-postgresql-pvc
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - master
+
+grafana:
+  enabled: true
+  fullnameOverride: grafana
+
+  adminUser: admin
+  adminPassword: password
+
+  service:
+    type: LoadBalancer
+
+  persistence:
+    size: 8Gi
+    storageClassName: local
+    existingClaim: grafana-pvc

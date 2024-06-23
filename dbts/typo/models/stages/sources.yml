@@ -1,0 +1,38 @@
+version: 2
+
+sources:
+  - name: typo
+    database: app
+    schema: public
+    tables:
+      - name: users
+        columns:
+          - name: user_id
+            tests:
+              - not_null
+          - name: occupation
+          - name: num_keyboards
+          - name: created_at
+          - name: updated_at
+          - name: deleted_at
+
+      - name: records
+        columns:
+          - name: user_id
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('users')
+                  field: user_id
+          - name: type
+            tests:
+              - not_null
+              - accepted_values:
+                  values: [ "K", "M" ]
+          - name: meta
+          - name: hostname
+            tests:
+              - not_null
+          - name: timestamp
+            tests:
+              - not_null

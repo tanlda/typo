@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dagster-aws
+  namespace: {{ .Release.Namespace }}
+data:
+  credentials: |
+    [default]
+    aws_access_key_id = {{ .Values.aws.accessKey }}
+    aws_secret_access_key = {{ .Values.aws.secretKey }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: dagster-postgresql-pv
+spec:
+  storageClassName: local
+  capacity:
+    storage: 16Gi
+  volumeMode: Filesystem
+  hostPath:
+    path: /kube/typo/pipes/dagsters/postgresql-pv
+  accessModes: [ "ReadWriteOnce" ]
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dagster-postgresql-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local
+  accessModes: [ "ReadWriteOnce" ]
+  volumeName: dagster-postgresql-pv
+  resources:
+    requests:
+      storage: 16Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: dagster-rabbitmq-pv
+spec:
+  storageClassName: local
+  capacity:
+    storage: 16Gi
+  volumeMode: Filesystem
+  hostPath:
+    path: /kube/typo/pipes/dagsters/rabbitmq-pv
+  accessModes: [ "ReadWriteOnce" ]
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dagster-rabbitmq-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local
+  accessModes: [ "ReadWriteOnce" ]
+  volumeName: dagster-rabbitmq-pv
+  resources:
+    requests:
+      storage: 16Gi
+---

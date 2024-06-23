@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: superset-postgresql-pv
+spec:
+  storageClassName: local
+  capacity:
+    storage: 16Gi
+  volumeMode: Filesystem
+  hostPath:
+    path: /kube/typo/visual/superset/postgresql-pv
+  accessModes: [ "ReadWriteOnce" ]
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - master
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: superset-postgresql-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local
+  accessModes: [ "ReadWriteOnce" ]
+  volumeName: superset-postgresql-pv
+  resources:
+    requests:
+      storage: 16Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: grafana-pv
+spec:
+  storageClassName: local
+  capacity:
+    storage: 8Gi
+  volumeMode: Filesystem
+  hostPath:
+    path: /kube/typo/visual/grafana/grafana-pv
+  accessModes: [ "ReadWriteOnce" ]
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - master
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local
+  accessModes: [ "ReadWriteOnce" ]
+  volumeName: grafana-pv
+  resources:
+    requests:
+      storage: 8Gi
+---

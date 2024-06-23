@@ -1,0 +1,30 @@
+global: { }
+
+nameOverride: ""
+fullnameOverride: ""
+
+airflow:
+  enabled: true
+  useStandardNaming: true
+
+  images:
+    airflow:
+      repository: microtypo.io/airflow
+      pullPolicy: Always
+      tag: latest
+
+  postgresql:
+    auth:
+      username: admin
+      password: password
+
+  webserver:
+    defaultUser:
+      username: admin
+      password: password
+    service:
+      type: LoadBalancer
+      ports:
+        - name: airflow-ui
+          targetPort: 8080
+          port: 80

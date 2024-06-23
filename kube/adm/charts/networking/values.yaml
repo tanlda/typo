@@ -1,0 +1,15 @@
+calico:
+  enabled: true
+  controller:
+    runOnControlPlane: true
+  installation:
+    enabled: true
+    calicoNetwork:
+      ipPools:
+        - blockSize: 26
+          cidr: 192.168.1.0/18
+          encapsulation: VXLANCrossSubnet
+          natOutgoing: Enabled
+          nodeSelector: all()
+  apiServer:
+    enabled: true

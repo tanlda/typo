@@ -1,0 +1,17 @@
+apiVersion: v2
+name: visual
+description: A Helm chart for Kubernetes
+
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
+
+dependencies:
+  - name: superset
+    version: 0.12.11
+    condition: superset.enabled
+    repository: http://apache.github.io/superset/
+  - name: grafana
+    version: 7.3.11
+    condition: grafana.enabled
+    repository: https://grafana.github.io/helm-charts

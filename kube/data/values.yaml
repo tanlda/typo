@@ -1,0 +1,26 @@
+dns:
+  enabled: true
+
+sgo:
+  enabled: true
+
+io:
+  enabled: true
+
+hub:
+  enabled: true
+
+mlops:
+  enabled: false
+
+airflow:
+  enabled: false
+
+pipes:
+  enabled: true
+
+dash:
+  enabled: true
+
+visual:
+  enabled: true

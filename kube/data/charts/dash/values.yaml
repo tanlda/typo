@@ -1,0 +1,38 @@
+global: { }
+nameOverride: ""
+fullnameOverride: ""
+
+lightdash:
+  enabled: true
+  replicaCount: 1
+
+  image:
+    tag: latest
+
+  extraEnv:
+    - name: DBT_PROJECT_DIR
+      value: /usr/app/dbt
+
+  service:
+    type: LoadBalancer
+    port: 8080
+
+  postgresql:
+    auth:
+      username: lightdash
+      database: lightdash
+      password: password
+      postgresPassword: password
+    primary:
+      persistence:
+        existingClaim: lightdash-postgresql-pvc
+
+  volumes:
+    - name: dbt
+      configMap:
+        name: lightdash-dbt
+
+  volumeMounts:
+    - mountPath: /root/.dbt/profiles.yml
+      name: dbt
+      subPath: profiles.yml

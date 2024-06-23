@@ -1,0 +1,46 @@
+dns:
+  dagster:
+    cloudflare:
+      tunnel_token: ""
+  dashboard:
+    cloudflare:
+      tunnel_token: ""
+  lightdash:
+    cloudflare:
+      tunnel_token: ""
+
+sgo:
+  adminui:
+    service:
+      exposeHTTP: true
+      type: LoadBalancer
+      loadBalancerIP: 192.168.1.32
+  authentication:
+    user: admin
+    password: password
+
+io:
+  notebook:
+    aws: # typo
+      accessKey: ""
+      secretKey: ""
+
+  warehouse:
+    backup:
+      bucketName: ""
+      accessKey: ""
+      secretKey: ""
+
+mlops: { }
+
+airflow: { }
+
+pipes:
+  aws:
+    accessKey: ""
+    secretKey: ""
+    bucketName: ""
+
+dash: { }
+
+visual: { }

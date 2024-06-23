@@ -1,0 +1,109 @@
+global: { }
+
+nameOverride: ""
+fullnameOverride: ""
+
+aws:
+  accessKey: ""
+  secretKey: ""
+  bucketName: ""
+
+dagster:
+  enabled: true
+  fullnameOverride: dagster
+
+  dagsterWebserver:
+    image:
+      pullPolicy: IfNotPresent
+    service:
+      type: LoadBalancer
+    nodeSelector:
+      kubernetes.io/hostname: master
+
+  postgresql:
+    postgresqlDatabase: dagster
+    postgresqlUsername: dagster
+    postgresqlPassword: password
+    persistence:
+      existingClaim: dagster-postgresql-pvc
+      size: 16Gi
+    master:
+      nodeSelector:
+        kubernetes.io/hostname: master
+
+  rabbitmq:
+    enabled: true
+    persistence:
+      existingClaim: dagster-rabbitmq-pvc
+      size: 16Gi
+    nodeSelector:
+      kubernetes.io/hostname: master
+
+  dagsterDaemon:
+    runCoordinator:
+      config:
+        queuedRunCoordinator:
+          maxConcurrentRuns: 8
+    nodeSelector:
+      kubernetes.io/hostname: master
+
+  runLauncher:
+    type: K8sRunLauncher
+    config:
+      k8sRunLauncher:
+        runK8sConfig:
+          podSpecConfig:
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: kubernetes.io/hostname
+                          operator: In
+                          values:
+                            - master
+              podAntiAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                  - weight: 1
+                    podAffinityTerm:
+                      topologyKey: kubernetes.io/hostname
+                      labelSelector:
+                        matchExpressions:
+                          - key: dagster/code-location
+                            operator: In
+                            values:
+                              - pipes
+            topologySpreadConstraints:
+              - maxSkew: 1
+                topologyKey: kubernetes.io/hostname
+                whenUnsatisfiable: ScheduleAnyway
+  dagster-user-deployments:
+    deployments:
+      - name: typo
+        image:
+          repository: microtypo.io/typo
+          tag: latest
+          pullPolicy: Always
+        dagsterApiGrpcArgs:
+          - --module-name
+          - typo
+        port: 3030
+        includeConfigInLaunchedRuns:
+          enabled: true
+        envConfigMaps:
+          - name: dagster-typo-config
+        volumes:
+          - name: dagster-data
+            persistentVolumeClaim:
+              claimName: dagster-typo-pvc
+          - name: dagster-aws
+            configMap:
+              name: dagster-aws
+        volumeMounts:
+          - mountPath: /opt/dagster/app/data
+            name: dagster-data
+          - mountPath: /root/.aws
+            name: dagster-aws
+            readOnly: true
+        nodeSelector:
+          kubernetes.io/hostname: master

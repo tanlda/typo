@@ -1,0 +1,44 @@
+environments:
+  stage:
+    values:
+      - values.yaml
+      - values/values.stage.yaml
+  prod:
+    values:
+      - values.yaml
+      - values/values.prod.yaml
+---
+repositories:
+  - name: metallb
+    url: https://metallb.github.io/metallb
+  - name: nvdp
+    url: https://nvidia.github.io/k8s-device-plugin
+
+releases:
+  - name: networking
+    version: 0.1.0
+    chart: charts/networking
+    namespace: tigera
+    createNamespace: true
+    disableValidation: true
+
+  - name: balancer
+    version: 0.1.0
+    chart: charts/balancer
+    disableValidation: true
+    createNamespace: true
+    namespace: metallb
+    values:
+      - values.gotmpl
+
+  - name: storage
+    version: 0.1.0
+    chart: charts/storage
+    namespace: kube-system
+    values:
+      - values.gotmpl
+
+  - name: cluster
+    version: 0.1.0
+    condition: cluster.enabled
+    chart: charts/cluster

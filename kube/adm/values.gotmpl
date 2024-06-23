@@ -1,0 +1,1 @@
+{{ readFile (printf "values/values.%s.yaml" .Environment.Name) | fromYaml | get .Release.Name | toYaml }}

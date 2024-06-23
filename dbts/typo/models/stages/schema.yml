@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: stg_records
+    columns:
+      - name: user_id
+      - name: type
+      - name: meta
+      - name: hostname
+      - name: timestamp
+
+  - name: stg_users
+    columns:
+      - name: user_id
+      - name: occupation
+      - name: num_keyboards
+      - name: created_at
+      - name: updated_at
+      - name: deleted_at
