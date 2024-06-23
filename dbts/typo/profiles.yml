@@ -1,0 +1,13 @@
+typo:
+  target: typo
+  outputs:
+    typo:
+      user: app
+      pass: password
+      host: warehouse.io
+      port: 5432
+      dbname: test
+      schema: public
+      threads: 1
+      type: postgres
+      sslmode: disable

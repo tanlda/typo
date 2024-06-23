@@ -13,7 +13,7 @@ metadata:
 spec:
   storageClassName: local
   capacity:
-    storage: 32Gi
+    storage: 4Gi
   volumeMode: Filesystem
   hostPath:
     path: /kube/typo/pipes/dagsters/typo-pv
@@ -30,5 +30,5 @@ spec:
   volumeName: dagster-typo-pv
   resources:
     requests:
-      storage: 32Gi
+      storage: 4Gi
 ---

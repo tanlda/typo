@@ -5,8 +5,6 @@ tasks:
     cmds:
       - rm -rf ./dbt
       - cp -r {{ .DBT }} ./dbt
-      - dbt deps --project-dir ./dbt --profiles-dir ./dbt
-      - dbt parse --project-dir ./dbt --profiles-dir ./dbt
     vars:
       DBT: '{{ .DBT | default "../../dbts/typo" }}'
 

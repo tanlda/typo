@@ -26,7 +26,7 @@ dagster:
     postgresqlPassword: password
     persistence:
       existingClaim: dagster-postgresql-pvc
-      size: 16Gi
+      size: 6Gi
     master:
       nodeSelector:
         kubernetes.io/hostname: master
@@ -35,7 +35,7 @@ dagster:
     enabled: true
     persistence:
       existingClaim: dagster-rabbitmq-pvc
-      size: 16Gi
+      size: 6Gi
     nodeSelector:
       kubernetes.io/hostname: master
 

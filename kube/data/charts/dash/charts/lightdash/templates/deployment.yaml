@@ -75,12 +75,6 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          volumeMounts:
-            - mountPath: /usr/app/dbt
-              name: dbt
-            - mountPath: /root/.dbt/profiles.yml
-              name: config
-              subPath: profiles.yml
         {{- if .Values.extraContainers }}
           {{- toYaml .Values.extraContainers | nindent 8 }}
         {{- end }}

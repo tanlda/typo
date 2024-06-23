@@ -19,4 +19,4 @@ metallb:
                     - master
 
   ip:
-    address: 192.168.1.16-192.168.1.64
+    address: ""  # provide

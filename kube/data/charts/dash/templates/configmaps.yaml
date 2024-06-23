@@ -5,10 +5,10 @@ metadata:
   namespace: dash
 data:
   profiles.yml: |
-    dbt:
-      target: dbt
+    typo:
+      target: typo
       outputs:
-        dbt:
+        typo:
           user: app
           pass: password
           host: warehouse.io

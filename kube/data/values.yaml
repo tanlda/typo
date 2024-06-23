@@ -5,7 +5,7 @@ sgo:
   enabled: true
 
 io:
-  enabled: true
+  enabled: false
 
 hub:
   enabled: true

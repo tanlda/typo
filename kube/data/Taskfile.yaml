@@ -13,4 +13,5 @@ tasks:
 
   clean:
     cmds:
+      - shopt -s globstar && rm -rf */**/Chart.lock
       - shopt -s globstar && rm -rf */**/*.tgz

@@ -12,7 +12,7 @@ metadata:
   name: warehouse-pv-{{ $i }}
 spec:
   capacity:
-    storage: 24Gi
+    storage: {{ $.Values.warehouse.persistent.size }}
   accessModes: [ "ReadWriteOnce" ]
   storageClassName: warehouse
   claimRef:

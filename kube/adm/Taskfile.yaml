@@ -30,9 +30,14 @@ tasks:
     vars:
       ENV: '{{ default "prod" .ENV }}'
 
+  hosts:
+    cmds:
+      - echo '127.0.0.1 registry.io' >> /etc/hosts
+      - echo '127.0.0.1 microtypo.io' >> /etc/hosts
+
   ufw:
     cmds:
-      - for: [ 179, 4789, 5473, 6443, 2379, 4149, 10250, 10255, 10256, 9099, 51820, 51821 ]
+      - for: [ 22, 179, 4789, 5473, 443, 6443, 2379, 4149, 10250, 10255, 10256, 9099, 51820, 51821 ]
         cmd: sudo ufw allow {{ .ITEM }}/tcp
 
   dep:

@@ -40,7 +40,7 @@ lakehouse:
                   - master
 
   persistence:
-    size: 128Gi
+    size: 8Gi
     storageClass: local
     existingClaim: lakehouse-pvc
     existingVolume: lakehouse-pv
@@ -58,6 +58,10 @@ warehouse:
   instances: 2
 
   backup:
+    region: ""
     bucketName: ""
     accessKey: ""
     secretKey: ""
+
+  persistent:
+    size: 8Gi

@@ -13,7 +13,7 @@ from typorio.core.worker import Worker
 @click.option("--dry-run", is_flag=True, default=False)
 @click.option("--shuffle", is_flag=True, default=True)
 @click.option("--max-rows", type=int, default=100)
-@click.option("--push-interval", type=int, default=60 * 10)
+@click.option("--push-interval", type=int, default=60 * 30)
 def start(
         env: str,
         profile: str,

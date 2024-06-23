@@ -1,7 +1,7 @@
 name: typo
 version: 1.0.0
 config-version: 2
-profile: app
+profile: typo
 model-paths:
   - models
 analysis-paths:

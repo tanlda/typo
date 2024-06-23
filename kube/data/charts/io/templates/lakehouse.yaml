@@ -4,7 +4,7 @@ metadata:
   name: lakehouse-pv
 spec:
   capacity:
-    storage: 512Gi
+    storage: 8Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -31,7 +31,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 512Gi
+      storage: 8Gi
   volumeMode: Filesystem
   storageClassName: local
   volumeName: lakehouse-pv

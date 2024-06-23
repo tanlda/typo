@@ -6,11 +6,11 @@ spec:
   storageClassName: local
   accessModes: [ "ReadWriteMany" ]
   capacity:
-    storage: 56Gi
+    storage: 4Gi
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /home/tanlda/work/microtypo/notebooks
+    path: /kube/typo/hub/notebook-pv
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -30,7 +30,7 @@ spec:
   accessModes: [ "ReadWriteMany" ]
   resources:
     requests:
-      storage: 56Gi
+      storage: 2Gi
   volumeName: notebooks-pv
 ---
 apiVersion: v1

@@ -1,0 +1,8 @@
+balancer:
+  metallb:
+    ip:
+      address: 192.168.1.16-192.168.1.64
+
+storage:
+  nfs:
+    server: 192.168.1.8

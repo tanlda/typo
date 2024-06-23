@@ -39,7 +39,7 @@ superset:
       postgresPassword: superset
     primary:
       persistence:
-        size: 16Gi
+        size: 2Gi
         storageClass: local
         existingClaim: superset-postgresql-pvc
     affinity:
@@ -63,6 +63,6 @@ grafana:
     type: LoadBalancer
 
   persistence:
-    size: 8Gi
+    size: 2Gi
     storageClassName: local
     existingClaim: grafana-pvc

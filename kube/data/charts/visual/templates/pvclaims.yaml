@@ -5,7 +5,7 @@ metadata:
 spec:
   storageClassName: local
   capacity:
-    storage: 16Gi
+    storage: 2Gi
   volumeMode: Filesystem
   hostPath:
     path: /kube/typo/visual/superset/postgresql-pv
@@ -30,7 +30,7 @@ spec:
   volumeName: superset-postgresql-pv
   resources:
     requests:
-      storage: 16Gi
+      storage: 2Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -39,7 +39,7 @@ metadata:
 spec:
   storageClassName: local
   capacity:
-    storage: 8Gi
+    storage: 2Gi
   volumeMode: Filesystem
   hostPath:
     path: /kube/typo/visual/grafana/grafana-pv
@@ -64,5 +64,5 @@ spec:
   volumeName: grafana-pv
   resources:
     requests:
-      storage: 8Gi
+      storage: 2Gi
 ---
